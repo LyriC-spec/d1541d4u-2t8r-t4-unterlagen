@@ -150,10 +150,18 @@ Was man zum BMC wissen sollte:
 - **Der BMC-Selbsttest über IPMI meldet „passed“** (Code `55 00`, geprüft am
   04.10.2026 lokal und über das Netz). Das BIOS zeigte auf der Seite
   Server Mgmt einmal „BMC Self Test Status: FAILED“, beim nächsten Start
-  wieder „PASSED“. Das passiert, wenn der langsame BMC beim Start nicht
-  rechtzeitig antwortet, ein Defekt ist es nicht.
-- Die BMC-Zugangsdaten bei der Übergabe ändern. Nach einem Zurücksetzen auf
-  Werkseinstellungen gelten wieder die Standardwerte.
+  wieder „PASSED“. Ursache ist eine Eigenheit dieser Firmware: Nach dem
+  Löschen des Ereignisprotokolls oder einem Rücksetzen meldet der Selbsttest
+  `57 80` („SEL device not accessible“), bis das Protokoll neu angelegt ist.
+  Abhilfe: `ipmitool sel clear`, danach meldet er wieder `55 00`.
+- **Der BMC wurde am 04.10.2026 auf Werkseinstellungen zurückgesetzt**
+  (ohne Preserve-Optionen). Netz per DHCP, nur der Benutzer `admin` mit dem
+  Standardkennwort. **Das Kennwort bei der Inbetriebnahme sofort ändern.**
+  Danach wieder gesetzt: SOL-Rate 115,2 kbit/s und Power Restore `previous`,
+  passend zum BIOS. Nach einem erneuten Rücksetzen beides wiederholen:
+  `ipmitool sol set non-volatile-bit-rate 115.2 1`,
+  `ipmitool sol set volatile-bit-rate 115.2 1`,
+  `ipmitool chassis policy previous`.
 
 ### Textkonsole über SOL
 
