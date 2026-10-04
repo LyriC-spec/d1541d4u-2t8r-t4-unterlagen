@@ -165,7 +165,7 @@
 
   /* ---------- Navigation ---------- */
   const TITEL = { uebersicht: "Übersicht", sensoren: "Sensoren", luefter: "Lüfter", strom: "Stromversorgung",
-                  konsole: "Konsole", ereignisse: "Ereignisprotokoll", bmc: "BMC" };
+                  konsole: "Konsole", sol: "Textkonsole (SOL)", ereignisse: "Ereignisprotokoll", bmc: "BMC" };
   function zeigeApp() {
     $("#login").hidden = true;
     $("#app").hidden = false;
@@ -450,6 +450,17 @@
     try { await api("/api/bmc/reset", { method: "POST" }); toast("BMC startet neu", "ok"); }
     catch (e) { toast(e.message, "bad"); }
   });
+
+  /* ---------- Textkonsole (SOL) ---------- */
+  // jede Verbindung startet eine SOL-Sitzung am BMC; deshalb nur auf Knopfdruck
+  function solVerbinden(an) {
+    $("#sol-frame").src = an ? "/sol/" : "about:blank";
+    $("#sol-start").hidden = an;
+    $("#sol-stop").hidden = !an;
+  }
+  $("#sol-start").addEventListener("click", () => solVerbinden(true));
+  $("#sol-stop").addEventListener("click", () => solVerbinden(false));
+  window.addEventListener("bmc-abmelden", () => solVerbinden(false));
 
   start().catch(e => { zeigeLogin(); $("#login-error").textContent = e.message; });
 })();

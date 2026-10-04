@@ -30,6 +30,7 @@
         <a href="#luefter" data-tab="luefter">Lüfter</a>
         <a href="#strom" data-tab="strom">Stromversorgung</a>
         <a href="#konsole" data-tab="konsole">Konsole</a>
+        <a href="#sol" data-tab="sol">Textkonsole (SOL)</a>
         <a href="#ereignisse" data-tab="ereignisse">Ereignisprotokoll</a>
         <a href="#bmc" data-tab="bmc">BMC</a>
       </nav>
@@ -150,6 +151,18 @@
             </div>
           </div>
           <details class="kvm-log"><summary>Protokoll des Viewers</summary><pre id="kvm-log"></pre></details>
+        </div>
+      </section>
+
+      <!-- Textkonsole -->
+      <section class="tab" id="tab-sol" hidden>
+        <div class="card kvm-card">
+          <div class="kvm-toolbar">
+            <button class="btn btn-primary" type="button" id="sol-start">Verbinden</button>
+            <button class="btn" type="button" id="sol-stop" hidden>Trennen</button>
+            <span class="muted small">IPMI Serial-over-LAN, 115200 Baud. Ins BIOS: beim Start Entf oder F2. Nur eine Sitzung gleichzeitig.</span>
+          </div>
+          <div class="sol-screen"><iframe id="sol-frame" title="Textkonsole" src="about:blank"></iframe></div>
         </div>
       </section>
 

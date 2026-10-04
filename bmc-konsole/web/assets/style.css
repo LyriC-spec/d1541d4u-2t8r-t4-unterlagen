@@ -152,6 +152,8 @@ dl.kv dd { margin: 0; overflow-wrap: anywhere; }
 .kvm-placeholder { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; color: #cbd5e1; padding: 24px; max-width: 520px; margin: auto; }
 .kvm-placeholder .muted { color: #94a3b8; }
 .kvm-error { margin: 0; border-radius: 0; }
+.sol-screen { background: #000; height: min(72vh, 820px); }
+.sol-screen iframe { width: 100%; height: 100%; border: 0; display: block; }
 .kvm-log { padding: 10px 14px; border-top: 1px solid var(--line); }
 .kvm-log pre { white-space: pre-wrap; font-size: .8rem; max-height: 220px; overflow: auto; margin: 8px 0 0; color: var(--muted); }
 

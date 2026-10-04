@@ -28,6 +28,10 @@ nichts.
   wird über x11vnc und noVNC im Browser angezeigt. Auf dem eigenen Rechner ist
   kein Java nötig. Sondertasten (Strg+Alt+Entf, F2, Entf, F11, F12, Esc) gibt
   es als Knöpfe, außerdem einen Vollbildmodus.
+- **Textkonsole (SOL)** im Browser: IPMI Serial-over-LAN über ttyd, etwa fürs
+  BIOS-Setup ohne grafische Konsole. Voraussetzung im BIOS: Serial Port 2 im
+  Modus SOL, Konsolenumleitung auf COM2 an, 115200 Baud; am BMC dieselbe Rate
+  (`ipmitool sol set non-volatile-bit-rate 115.2 1`).
 - **Übersicht, Sensoren** mit Status, Schwellwerten und 15-Minuten-Verlauf
 - **Lüfter** nach dem ASRock-Schema (`ipmitool raw 0x3a 0x01/0x02`), mit Namen
   aus `fans.json`

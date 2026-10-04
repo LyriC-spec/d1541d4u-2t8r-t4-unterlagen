@@ -11,7 +11,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
-      xvfb x11vnc x11-utils openbox xdotool fonts-dejavu-core \
+      xvfb x11vnc x11-utils openbox xdotool fonts-dejavu-core ttyd \
       websockify nginx supervisor ipmitool openssl curl ca-certificates \
       python3 python3-flask python3-waitress python3-requests \
  && rm -rf /var/lib/apt/lists/* \
@@ -29,7 +29,8 @@ COPY container/supervisord.conf /etc/supervisor/bmc-konsole.conf
 COPY container/nginx.conf /etc/nginx/nginx.conf
 COPY container/openbox-rc.xml /home/konsole/.config/openbox/rc.xml
 COPY container/entrypoint.sh /entrypoint.sh
-RUN chown -R konsole:konsole /home/konsole && chmod 755 /entrypoint.sh
+COPY container/sol.sh /opt/bmc-konsole/sol.sh
+RUN chown -R konsole:konsole /home/konsole && chmod 755 /entrypoint.sh /opt/bmc-konsole/sol.sh
 
 VOLUME /data
 EXPOSE 8443
