@@ -144,11 +144,57 @@ Was man zum BMC wissen sollte:
   OpenSSL 0.9.8 (nur TLS 1.0), OpenSSH 5.5 und IPMI 2.0. Für BMCs dieser
   AMI-Generation sind schwere Lücken bekannt, darunter fest eingebaute Konten
   (CVE-2022-40242). Updates gibt es keine mehr.
-- **Nach einem Stromausfall bleibt der Server aus.** Die Power Restore Policy
-  steht auf `always-off`. Ändern lässt sie sich mit
-  `ipmitool chassis policy always-on` oder `previous`.
+- **Nach einem Stromausfall** startet der Server nur, wenn er vorher lief
+  (BIOS „Restore on AC/Power Loss: Last State“, BMC
+  `ipmitool chassis policy previous`, beides am 04.10.2026 gesetzt).
+- **Der BMC-Selbsttest über IPMI meldet „passed“** (Code `55 00`, geprüft am
+  04.10.2026 lokal und über das Netz). Das BIOS zeigte auf der Seite
+  Server Mgmt einmal „BMC Self Test Status: FAILED“, beim nächsten Start
+  wieder „PASSED“. Das passiert, wenn der langsame BMC beim Start nicht
+  rechtzeitig antwortet, ein Defekt ist es nicht.
 - Die BMC-Zugangsdaten bei der Übergabe ändern. Nach einem Zurücksetzen auf
   Werkseinstellungen gelten wieder die Standardwerte.
+
+### Textkonsole über SOL
+
+Das BIOS-Setup, die Startmeldungen, GRUB und das TrueNAS-Konsolenmenü lassen
+sich auch ohne grafische Konsole über IPMI Serial-over-LAN bedienen. Anders als
+die KVM ist SOL auf der Leitung verschlüsselt (RMCP+, Cipher Suite 3):
+
+```bash
+ipmitool -I lanplus -C 3 -H <bmc-ip> -U <benutzer> -P <kennwort> sol activate
+```
+
+Beim Start Entf oder F2 drücken, dann öffnet sich das Setup. Beenden mit `~.`
+am Zeilenanfang. Die BMC-Konsole hat dafür den Bereich „Textkonsole (SOL)“.
+Ein ISO einlegen kann man über SOL nicht, dafür braucht es die KVM oder einen
+USB-Stick.
+
+### BIOS-Einstellungen
+
+Stand 04.10.2026, BIOS P1.30. Zuerst wurden die UEFI-Defaults geladen, danach
+für Virtualisierung (Proxmox, TrueNAS, Unraid, Docker, VMs) angepasst:
+
+| Einstellung | Wert | Wozu |
+|---|---|---|
+| Intel Virtualization Technology (VT-x) | Enable | VMs |
+| VT-d | Enable | PCIe-Durchreichen, etwa der T4 oder des HBA |
+| Above 4G Decoding | Enabled | große PCIe-Adressbereiche (T4) |
+| SR-IOV Support | Enabled | virtuelle Funktionen der X710/X540 |
+| Primary Graphics Adapter | **Onboard** | Die Defaults stellen „PCI Express“ ein. Dann bleibt die Fernkonsole schwarz |
+| Boot option filter / Storage OpROM | UEFI only | reiner UEFI-Start |
+| Restore on AC/Power Loss | Last State | siehe oben |
+| Hard Disk S.M.A.R.T | Enabled | stand vorher auf Disabled |
+| Serial Port 2 | Enabled, Modus SOL | Textkonsole über IPMI |
+| COM2 Console Redirection | Enabled, VT100+, 115200 8N1 | BIOS über SOL |
+| Full Screen Logo | Disabled | POST-Meldungen sichtbar |
+| Setup Prompt Timeout | 3 s | Entf/F2 auch über die Fernkonsole erreichbar |
+| SATA Mode | AHCI | ZFS braucht die Platten direkt |
+| C-States, SpeedStep, Turbo | an | Stromsparen, bremst VMs nicht |
+
+TrueNAS gibt seine Konsole zusätzlich auf `ttyS1` mit 115200 Baud aus
+(System → Erweitert → Serielle Konsole). Die SOL-Rate des BMC steht passend
+auf 115,2 kbit/s.
 
 ## Was man wissen sollte
 
