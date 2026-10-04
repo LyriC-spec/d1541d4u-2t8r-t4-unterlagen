@@ -84,6 +84,22 @@ keine Einträge im Fehlerprotokoll, Kurztest am 04.10.2026 ohne Fehler. Der
 Verschleißwert (Attribut 173, normiert) steht bei 93 und 98 von 100. SMART war
 in beiden Laufwerken abgeschaltet und wurde für diese Prüfung eingeschaltet.
 
+## Firmware
+
+Stand 04.10.2026, alle Versionen am Gerät ausgelesen und mit den
+Herstellerquellen abgeglichen:
+
+| Komponente | Firmware | Bemerkung |
+|---|---|---|
+| 8 × SAS-SSD HPE MO003200JWUGA | HPD4 | neueste. Enthält den von HPE als kritisch eingestuften Fix gegen Neustartschleifen ab 56.000 Betriebsstunden (Bulletin a00142174) |
+| 2 × Boot-SSD HPE VK0120GEYJP | **HPG6** | am 04.10.2026 von HPG1 aktualisiert, neueste. HPG5 ist von HPE wegen möglichem Datenverlust zurückgezogen (Bulletin a00102353), ein Downgrade ist nicht möglich |
+| HPE 563SFP+ (Intel X710) | **NVM 9.57** (0x80010365), UEFI 5.0.52 | am 04.10.2026 mit Intels offiziellem NVM-Update-Paket von 9.56 aktualisiert. Die Karte ist eine Intel X710-DA4 (PBA J38273) mit HPE-Kennung und nimmt Intel-Updates direkt an |
+| SAS3008 (9300-8i) | 16.00.12.00 IT | letzte P16 |
+| X540 onboard | 0x800003e2 | keine Updates verfügbar |
+| Tesla T4 | 90.04.96.00.01 | NVIDIA-Referenzkarte, keine öffentlichen Updates |
+| WD Green WD40EZRX | 80.00A80 | keine Updates verfügbar |
+| BIOS / BMC | P1.30 / 0.16 | jeweils letzte Version von ASRock |
+
 ## Kühlung der Tesla T4
 
 Die T4 ist eine passive Serverkarte und darauf ausgelegt, im Luftstrom eines
