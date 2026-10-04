@@ -1,0 +1,12 @@
+[
+  {"byte": 1, "sensor": "CPU_FAN1", "name": "CPU-Lüfter", "regelbar": false,
+   "hinweis": "Reagiert nicht auf Stellwerte, läuft fest (vermutlich 3-Pin-Lüfter)"},
+  {"byte": 3, "sensor": "REAR_FAN1", "name": "Gehäuse hinten",
+   "hinweis": "2× Noctua 60 mm am Y-Kabel, nur einer meldet die Drehzahl"},
+  {"byte": 5, "sensor": "FRNT_FAN1", "name": "Front 1", "hinweis": "nicht belegt"},
+  {"byte": 6, "sensor": "FRNT_FAN2", "name": "Blower Tesla T4",
+   "hinweis": "Radiallüfter der GPU"},
+  {"byte": 7, "sensor": "FRNT_FAN3", "name": "Chipsatz / 10G X540",
+   "hinweis": "kühlt Chipsatz und den 10GBase-T-Baustein"},
+  {"byte": 8, "sensor": "FRNT_FAN4", "name": "Front 4", "hinweis": "nicht belegt"}
+]

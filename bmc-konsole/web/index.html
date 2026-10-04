@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BMC-Konsole</title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='6' width='26' height='20' rx='3' fill='%233b82f6'/%3E%3Crect x='7' y='10' width='18' height='4' rx='1' fill='white'/%3E%3Ccircle cx='9' cy='20' r='2' fill='%2322c55e'/%3E%3C/svg%3E">
+</head>
+<body>
+  <!-- Anmeldung -->
+  <section id="login" class="login" hidden>
+    <form id="login-form" class="login-card" autocomplete="on">
+      <div class="brand brand-lg"><span class="brand-mark"></span><span id="login-title">BMC-Konsole</span></div>
+      <p class="muted" id="login-sub"></p>
+      <label for="pw">Kennwort</label>
+      <input id="pw" name="password" type="password" autocomplete="current-password" required autofocus>
+      <button class="btn btn-primary btn-block" type="submit">Anmelden</button>
+      <p id="login-error" class="error" role="alert"></p>
+    </form>
+  </section>
+
+  <!-- Anwendung -->
+  <div id="app" class="app" hidden>
+    <aside class="sidebar" id="sidebar">
+      <div class="brand"><span class="brand-mark"></span><span id="app-title">BMC-Konsole</span></div>
+      <nav>
+        <a href="#uebersicht" data-tab="uebersicht">Übersicht</a>
+        <a href="#sensoren" data-tab="sensoren">Sensoren</a>
+        <a href="#luefter" data-tab="luefter">Lüfter</a>
+        <a href="#strom" data-tab="strom">Stromversorgung</a>
+        <a href="#konsole" data-tab="konsole">Konsole</a>
+        <a href="#ereignisse" data-tab="ereignisse">Ereignisprotokoll</a>
+        <a href="#bmc" data-tab="bmc">BMC</a>
+      </nav>
+      <div class="sidebar-foot">
+        <button class="btn btn-ghost btn-block" id="theme-toggle" type="button">Farbschema wechseln</button>
+        <button class="btn btn-ghost btn-block" id="logout" type="button">Abmelden</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="btn btn-ghost menu-btn" id="menu-btn" type="button" aria-label="Menü">☰</button>
+        <h1 id="page-title">Übersicht</h1>
+        <div class="topbar-status">
+          <span id="power-pill" class="pill">Strom: –</span>
+          <span id="poll-pill" class="pill" title="Letzte Abfrage beim BMC">–</span>
+        </div>
+      </header>
+
+      <div id="banner" class="banner" hidden></div>
+
+      <!-- Übersicht -->
+      <section class="tab" id="tab-uebersicht">
+        <div class="grid kpis" id="kpis"></div>
+        <div class="grid two">
+          <div class="card">
+            <div class="card-head"><h2>Temperaturen</h2></div>
+            <div id="ov-temps" class="list"></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><h2>Lüfter</h2><a href="#luefter" class="link">Steuern</a></div>
+            <div id="ov-fans" class="list"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>Schnellzugriff</h2></div>
+          <div class="actions">
+            <a class="btn btn-primary" href="#konsole">Konsole öffnen</a>
+            <button class="btn" type="button" data-power="bios">Nächster Start ins BIOS</button>
+            <a class="btn" href="#strom">Stromversorgung</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sensoren -->
+      <section class="tab" id="tab-sensoren" hidden>
+        <div id="sensor-groups"></div>
+        <p class="muted small">Messwerte alle 10 s, Schwellwerte alle 5 Minuten. Verlauf der letzten 15 Minuten.</p>
+      </section>
+
+      <!-- Lüfter -->
+      <section class="tab" id="tab-luefter" hidden>
+        <div id="fan-notice" class="note" hidden></div>
+        <div class="card">
+          <div class="card-head"><h2>Alle Lüfter</h2></div>
+          <div class="actions">
+            <button class="btn" type="button" id="fans-auto">Alle auf BMC-Automatik</button>
+            <button class="btn btn-warn" type="button" id="fans-full">Alle auf 100 %</button>
+          </div>
+        </div>
+        <div class="grid fans" id="fan-cards"></div>
+      </section>
+
+      <!-- Strom -->
+      <section class="tab" id="tab-strom" hidden>
+        <div class="grid two">
+          <div class="card">
+            <div class="card-head"><h2>Zustand</h2></div>
+            <div class="power-big" id="power-big">–</div>
+            <dl class="kv" id="chassis-kv"></dl>
+          </div>
+          <div class="card">
+            <div class="card-head"><h2>Schalten</h2></div>
+            <div class="actions col">
+              <button class="btn btn-primary" type="button" data-power="on">Einschalten</button>
+              <button class="btn" type="button" data-power="soft">Herunterfahren (ACPI)</button>
+              <button class="btn btn-danger" type="button" data-power="off">Hart ausschalten</button>
+              <button class="btn btn-danger" type="button" data-power="reset">Reset</button>
+              <button class="btn btn-danger" type="button" data-power="cycle">Aus- und wieder einschalten</button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>BIOS-Setup</h2></div>
+          <p>Setzt beim BMC, dass der <strong>nächste</strong> Start direkt ins BIOS-Setup geht. Danach startet der Server wieder normal.</p>
+          <p class="muted small" id="bios-hinweis">Die Konsole muss dafür auf einem anderen Rechner laufen als auf diesem Server – sonst ist sie weg, sobald er neu startet.</p>
+          <p class="muted">Aktuelle Startvorgabe: <span id="bootflag">–</span></p>
+          <div class="actions">
+            <button class="btn btn-primary" type="button" data-power="bios">Nächster Start ins BIOS</button>
+            <button class="btn" type="button" data-power="bios-zuruecknehmen">Vorgabe zurücknehmen</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Konsole -->
+      <section class="tab" id="tab-konsole" hidden>
+        <div class="card kvm-card">
+          <div class="kvm-toolbar">
+            <button class="btn btn-primary" type="button" id="kvm-start">Konsole starten</button>
+            <button class="btn" type="button" id="kvm-stop" hidden>Konsole beenden</button>
+            <button class="btn btn-sm" type="button" id="kvm-reload" hidden>Viewer-Dateien neu laden</button>
+            <span class="sep"></span>
+            <button class="btn btn-sm" type="button" data-key="cad" disabled>Strg+Alt+Entf</button>
+            <button class="btn btn-sm" type="button" data-key="F2" disabled>F2</button>
+            <button class="btn btn-sm" type="button" data-key="Delete" disabled>Entf</button>
+            <button class="btn btn-sm" type="button" data-key="F11" disabled>F11</button>
+            <button class="btn btn-sm" type="button" data-key="F12" disabled>F12</button>
+            <button class="btn btn-sm" type="button" data-key="Escape" disabled>Esc</button>
+            <span class="sep"></span>
+            <button class="btn btn-sm" type="button" id="kvm-fullscreen" disabled>Vollbild</button>
+            <span id="kvm-state" class="pill">gestoppt</span>
+          </div>
+          <div class="banner kvm-error" id="kvm-error" hidden></div>
+          <div class="kvm-screen" id="kvm-screen">
+            <div class="kvm-placeholder" id="kvm-placeholder">
+              <p><strong>Grafische Konsole</strong></p>
+              <p class="muted">Startet den Original-Viewer des BMC im Container und zeigt ihn hier als HTML5-Konsole. Tastatur und Maus gehen an den Server, sobald du ins Bild klickst.</p>
+            </div>
+          </div>
+          <details class="kvm-log"><summary>Protokoll des Viewers</summary><pre id="kvm-log"></pre></details>
+        </div>
+      </section>
+
+      <!-- Ereignisse -->
+      <section class="tab" id="tab-ereignisse" hidden>
+        <div class="card">
+          <div class="card-head">
+            <h2>Ereignisprotokoll (SEL)</h2>
+            <div class="actions">
+              <button class="btn btn-sm" type="button" id="sel-reload">Neu laden</button>
+              <button class="btn btn-sm btn-danger" type="button" id="sel-clear">Löschen</button>
+            </div>
+          </div>
+          <p class="muted small" id="sel-info"></p>
+          <div class="table-wrap"><table class="table" id="sel-table">
+            <thead><tr><th>Nr.</th><th>Datum</th><th>Zeit</th><th>Sensor</th><th>Ereignis</th><th></th></tr></thead>
+            <tbody></tbody>
+          </table></div>
+        </div>
+      </section>
+
+      <!-- BMC -->
+      <section class="tab" id="tab-bmc" hidden>
+        <div class="grid two">
+          <div class="card"><div class="card-head"><h2>Controller</h2></div><dl class="kv" id="mc-kv"></dl></div>
+          <div class="card"><div class="card-head"><h2>Netzwerk</h2></div><dl class="kv" id="lan-kv"></dl></div>
+        </div>
+        <div class="grid two">
+          <div class="card">
+            <div class="card-head"><h2>Uhrzeit</h2></div>
+            <dl class="kv" id="time-kv"></dl>
+            <div class="actions"><button class="btn" type="button" id="bmc-time">BMC-Uhr auf Containerzeit stellen</button></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><h2>Wartung</h2></div>
+            <p>Startet nur den BMC neu, nicht den Server. Die Konsole und IPMI sind dabei etwa zwei Minuten nicht erreichbar.</p>
+            <div class="actions"><button class="btn btn-danger" type="button" id="bmc-reset">BMC neu starten</button></div>
+          </div>
+        </div>
+        <div class="card"><div class="card-head"><h2>FRU</h2></div><dl class="kv" id="fru-kv"></dl></div>
+        <div class="note">Dieser BMC hat eine Firmware von 2017 (OpenSSL 0.9.8, OpenSSH 5.5, IPMI 2.0 mit RAKP). Er gehört in ein abgetrenntes Verwaltungsnetz und sollte nur von dieser Konsole aus erreichbar sein.</div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Bestätigungsdialog -->
+  <dialog id="confirm" class="dialog">
+    <form method="dialog">
+      <h3 id="confirm-title"></h3>
+      <p id="confirm-text"></p>
+      <div id="confirm-typed" hidden>
+        <label for="confirm-input">Zum Bestätigen <strong id="confirm-word"></strong> eingeben</label>
+        <input id="confirm-input" autocomplete="off">
+      </div>
+      <div class="actions end">
+        <button class="btn" type="button" id="confirm-cancel">Abbrechen</button>
+        <button class="btn btn-danger" value="ok" id="confirm-ok" type="submit">Ausführen</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+
+  <script src="/assets/app.js"></script>
+  <script type="module" src="/assets/konsole.js"></script>
+</body>
+</html>

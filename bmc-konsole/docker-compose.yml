@@ -1,0 +1,16 @@
+services:
+  bmc-konsole:
+    build: .
+    image: bmc-konsole:latest
+    container_name: bmc-konsole
+    restart: unless-stopped
+    stop_grace_period: 40s
+    ports:
+      - "8443:8443"
+    env_file: .env
+    environment:
+      UI_TITLE: "D1541D4U · BMC-Konsole"
+      # Nur setzen, wenn auf dem Server die T4-Lüfterregelung aus skripte/ läuft
+      FAN_NOTICE: "Auf dem Server läuft die T4-Lüfterregelung (t4-fan.py). Sie schreibt Blower, Gehäuse und Netz spätestens alle 30 s neu. Manuelle Werte gelten deshalb nur kurz, solange die Regelung läuft."
+    volumes:
+      - ./data:/data

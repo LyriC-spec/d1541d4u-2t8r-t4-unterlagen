@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openbox_config xmlns="http://openbox.org/3.4/rc">
+  <focus><followMouse>no</followMouse><focusNew>yes</focusNew></focus>
+  <placement><policy>Smart</policy><center>yes</center></placement>
+  <desktops><number>1</number></desktops>
+  <keyboard><rebindOnMappingNotify>no</rebindOnMappingNotify></keyboard>
+  <mouse/>
+  <applications>
+    <!-- Hauptfenster des JViewers ohne Rahmen oben links. Nicht maximieren:
+         JViewer passt sein Fenster selbst an die Aufloesung des Servers an,
+         und die App schneidet x11vnc genau auf dieses Fenster zu. -->
+    <application title="JViewer*" type="normal">
+      <decor>no</decor>
+      <position force="yes"><x>0</x><y>0</y></position>
+      <focus>yes</focus>
+    </application>
+  </applications>
+</openbox_config>

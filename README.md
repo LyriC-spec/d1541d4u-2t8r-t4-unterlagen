@@ -10,6 +10,7 @@ laufenden Gerät ausgelesen oder gemessen, nicht aus Datenblättern übernommen.
 | [EINRICHTUNG.md](EINRICHTUNG.md) | Was für die T4 eingerichtet ist, Wiederherstellung nach einer Neuinstallation, Fehlersuche |
 | [MESSUNGEN.md](MESSUNGEN.md) | Rohwerte der Lüfter- und Lastmessungen |
 | [skripte/](skripte/) | Lüfterregelung und Wächter, genau so, wie sie auf dem System laufen |
+| [bmc-konsole/](bmc-konsole/) | Weboberfläche mit HTML5-Fernkonsole für den BMC, als Docker-Container |
 | [smart/](smart/) | Ungekürzte SMART-Ausgaben aller zwölf Datenträger |
 
 ## Ausstattung
@@ -120,6 +121,34 @@ sich bei **64–65 °C und 76–80 % Blower** (6100 U/min) ein. Gehäuse- und
 Netzzone bleiben dabei auf 30 %, die Datenträger bei 37 °C, der X540 bei 50 °C.
 Endet die Last, ist der Blower nach anderthalb Minuten wieder auf 30 %. Die
 Rohwerte stehen in [MESSUNGEN.md](MESSUNGEN.md).
+
+## Fernwartung (BMC)
+
+Der BMC (AMI MegaRAC auf ASPEED) hat Firmware 00.16.00 von 2017. Das ist die
+letzte Version, die ASRock für dieses Board veröffentlicht hat. Eine neuere
+gibt es nicht, auch keine mit HTML5-Konsole oder Redfish. Seine Fernkonsole
+braucht einen Java-Viewer, den aktuelle Browser nicht mehr starten.
+
+Dafür liegt im Ordner [bmc-konsole/](bmc-konsole/) ein Docker-Container. Er
+führt den Original-Viewer im Container aus und zeigt ihn als HTML5-Seite im
+Browser, mit Sensoren, Lüftern, Stromversorgung, Ereignisprotokoll und einem
+Knopf „Nächster Start ins BIOS“. Der Container läuft auf einem beliebigen
+anderen Rechner im Netz. Auf dem Server selbst sollte er nicht laufen, sonst ist
+er weg, sobald der Server neu startet.
+
+![BMC-Konsole](bmc-konsole/bilder/konsole.png)
+
+Was man zum BMC wissen sollte:
+
+- **Er gehört in ein abgetrenntes Verwaltungsnetz.** Die Firmware verwendet
+  OpenSSL 0.9.8 (nur TLS 1.0), OpenSSH 5.5 und IPMI 2.0. Für BMCs dieser
+  AMI-Generation sind schwere Lücken bekannt, darunter fest eingebaute Konten
+  (CVE-2022-40242). Updates gibt es keine mehr.
+- **Nach einem Stromausfall bleibt der Server aus.** Die Power Restore Policy
+  steht auf `always-off`. Ändern lässt sie sich mit
+  `ipmitool chassis policy always-on` oder `previous`.
+- Die BMC-Zugangsdaten bei der Übergabe ändern. Nach einem Zurücksetzen auf
+  Werkseinstellungen gelten wieder die Standardwerte.
 
 ## Was man wissen sollte
 
