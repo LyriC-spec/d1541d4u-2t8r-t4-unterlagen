@@ -48,6 +48,18 @@ fi
 laeuft=0
 ps -eo cmd | grep -q "[t]4-fan.py" && laeuft=1
 
+# Frisch gestartet (etwa durch PostInit beim Booten): Das erste Lebenszeichen
+# kommt erst nach dem ersten Regelschritt, und eine alte Datei von vor dem
+# Neustart liegt noch in /tmp. Ohne diese Pruefung wuerde der Waechter die
+# neue Regelung sofort wieder beenden.
+if [ "$laeuft" -eq 1 ]; then
+  pid=$(pgrep -f "[t]4-fan.py" | head -1)
+  laufzeit=$(ps -o etimes= -p "$pid" 2>/dev/null | tr -d ' ')
+  if [ -n "$laufzeit" ] && [ "$laufzeit" -lt "$MAX_ALTER" ]; then
+    exit 0
+  fi
+fi
+
 frisch=0
 if [ -f "$HEARTBEAT" ]; then
   alter=$(( $(date +%s) - $(stat -c %Y "$HEARTBEAT") ))
