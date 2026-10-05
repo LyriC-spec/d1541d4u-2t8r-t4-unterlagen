@@ -1,0 +1,351 @@
+SMART-Report MO003200JWUGA WZX00G5A
+Erstellt: 2026-10-05T22:04:17+02:00  (Geraetename zum Zeitpunkt: /dev/sdg)
+System: ASRock Rack D1541D4U-2T8R, TrueNAS 26.0.0-BETA.3
+==================================================
+
+### smartctl -x
+
+smartctl 7.4 2023-08-01 r5530 [x86_64-linux-6.18.42-production+truenas] (local build)
+Copyright (C) 2002-23, Bruce Allen, Christian Franke, www.smartmontools.org
+
+=== START OF INFORMATION SECTION ===
+Vendor:               HP
+Product:              MO003200JWUGA
+Revision:             HPD4
+Compliance:           SPC-5
+User Capacity:        3,200,631,791,616 bytes [3.20 TB]
+Logical block size:   512 bytes
+Physical block size:  4096 bytes
+LU is resource provisioned, LBPRZ=1
+Rotation Rate:        Solid State Device
+Form Factor:          2.5 inches
+Logical Unit id:      0x5000cca0ac70c2e4
+Serial number:        WZX00G5A
+Device type:          disk
+Transport protocol:   SAS (SPL-4)
+Local Time is:        Mon Oct  5 22:04:17 2026 CEST
+SMART support is:     Available - device has SMART capability.
+SMART support is:     Enabled
+Temperature Warning:  Enabled
+Read Cache is:        Enabled
+Writeback Cache is:   Disabled
+
+=== START OF READ SMART DATA SECTION ===
+SMART Health Status: OK
+
+Percentage used endurance indicator: 2%
+Current Drive Temperature:     34 C
+Drive Trip Temperature:        60 C
+
+Manufactured in week 50 of year 2019
+Specified cycle count over device lifetime:  0
+Accumulated start-stop cycles:  0
+Specified load-unload count over device lifetime:  0
+Accumulated load-unload cycles:  0
+Elements in grown defect list: 0
+
+Error counter log:
+           Errors Corrected by           Total   Correction     Gigabytes    Total
+               ECC          rereads/    errors   algorithm      processed    uncorrected
+           fast | delayed   rewrites  corrected  invocations   [10^9 bytes]  errors
+read:          0        0         0         0          0     280618.872           0
+write:         0        0         0         0          0     198856.969           0
+
+Non-medium error count:    82117
+
+SMART Self-test log
+Num  Test              Status                 segment  LifeTime  LBA_first_err [SK ASC ASQ]
+     Description                              number   (hours)
+# 1  Background long   Completed                   -   44022                 - [-   -    -]
+# 2  Background short  Completed                   -   43939                 - [-   -    -]
+
+Long (extended) Self-test duration: 35200 seconds [9.8 hours]
+
+Background scan results log
+  Status: waiting until BMS interval timer expires
+    Accumulated power on time, hours:minutes 44036:57 [2642217 minutes]
+    Number of background scans performed: 459,  scan progress: 0.00%
+    Number of background medium scans performed: 459
+
+General statistics and performance log page:
+  General access statistics and performance:
+    Number of read commands: 41471863313
+    Number of write commands: 37485306246
+    number of logical blocks received: 388392518482
+    number of logical blocks transmitted: 548083733632
+    read command processing intervals: 0
+    write command processing intervals: 0
+    weighted number of read commands plus write commands: 0
+    weighted read command processing plus write command processing: 0
+  Idle time:
+    Idle time intervals: 2172186492
+      in seconds: 108609324.600
+      in hours: 30169.256
+
+Protocol Specific port log page for SAS SSP
+relative target port id = 1
+  generation code = 5
+  number of phys = 1
+  phy identifier = 0
+    attached device type: SAS or SATA device
+    attached reason: unknown
+    reason: loss of dword synchronization
+    negotiated logical link rate: phy enabled; 12 Gbps
+    attached initiator port: ssp=1 stp=1 smp=1
+    attached target port: ssp=0 stp=0 smp=0
+    SAS address = 0x5000cca0ac70c2e5
+    attached SAS address = 0x5d050990000474e2
+    attached phy identifier = 2
+    Invalid DWORD count = 13
+    Running disparity error count = 13
+    Loss of DWORD synchronization count = 3
+    Phy reset problem count = 0
+relative target port id = 2
+  generation code = 5
+  number of phys = 1
+  phy identifier = 1
+    attached device type: no device attached
+    attached reason: unknown
+    reason: power on
+    negotiated logical link rate: phy enabled; unknown
+    attached initiator port: ssp=0 stp=0 smp=0
+    attached target port: ssp=0 stp=0 smp=0
+    SAS address = 0x5000cca0ac70c2e6
+    attached SAS address = 0x0
+    attached phy identifier = 0
+    Invalid DWORD count = 0
+    Running disparity error count = 0
+    Loss of DWORD synchronization count = 0
+    Phy reset problem count = 0
+
+
+### sg_logs -a (alle SCSI-Logseiten)
+
+    HP        MO003200JWUGA     HPD4
+
+Supported log pages log page  [0x0]:
+  0x00        Supported log pages [sp]
+  0x02        Write error counters [we]
+  0x03        Read error counters [re]
+  0x05        Verify error counters [ve]
+  0x06        Non medium [nm]
+  0x0d        Temperature [temp]
+  0x0e        Start-stop cycle counter [sscc]
+  0x0f        Application client [ac]
+  0x10        Self test results [str]
+  0x11        Solid state media [ssm]
+  0x15        Background scan results [bsr]
+  0x17        Non volatile cache [nvc]
+  0x18        Protocol specific port [psp]
+  0x19        General Statistics and Performance [gsp]
+  0x1a        Power condition transitions [pct]
+  0x2f        Informational exceptions [ie]
+  0x30        Performance counters (Hitachi) [pc_hi]
+  0x32        
+  0x35        
+  0x36        
+  0x37        Cache (seagate) [c_se]
+  0x39        
+
+Write error counter log page  [0x2]
+  Errors corrected without substantial delay = 0
+  Errors corrected with possible delays = 0
+  Total rewrites or rereads = 0
+  Total errors corrected = 0
+  Total times correction algorithm processed = 0
+  Total bytes processed = 198856969462784 [198 TB]
+  Total uncorrected errors = 0
+
+Read error counter log page  [0x3]
+  Errors corrected without substantial delay = 0
+  Errors corrected with possible delays = 0
+  Total rewrites or rereads = 0
+  Total errors corrected = 0
+  Total times correction algorithm processed = 0
+  Total bytes processed = 280618871619584 [280 TB]
+  Total uncorrected errors = 0
+
+Verify error counter log page  [0x5]
+  Errors corrected without substantial delay = 0
+  Errors corrected with possible delays = 0
+  Total rewrites or rereads = 0
+  Total errors corrected = 0
+  Total times correction algorithm processed = 0
+  Total bytes processed = 0
+  Total uncorrected errors = 0
+
+Non-medium error log page  [0x6]
+  Non-medium error count = 82117
+
+Temperature log page  [0xd]
+  Current temperature = 34 C
+  Reference temperature = 60 C
+
+Start-stop cycle counter log page  [0xe]
+  Date of manufacture, year: 2019, week: 50
+  Accounting date, year: 2019, week: 50
+  Specified cycle count over device lifetime = 0
+  Accumulated start-stop cycles = 0
+  Specified load-unload count over device lifetime = 0
+  Accumulated load-unload cycles = 0
+
+Application Client log page  [0xf]
+  0f 00 40 00 00 00 83 fc  00 00 00 00 00 00 00 00
+  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+  .....  [truncated after 64 of 16388 bytes (use '-H' to see the rest)]
+
+Self-test results log page  [0x10]
+  Parameter code = 1, accumulated power-on hours = 44022
+    Self-test code: background extended [2]
+    Self-test result: completed without error [0]
+  Parameter code = 2, accumulated power-on hours = 43939
+    Self-test code: background short [1]
+    Self-test result: completed without error [0]
+
+Solid state media log page  [0x11]
+  Percentage used endurance indicator: 2 %
+
+Background scan results log page  [0x15]
+  Status parameters:
+    Accumulated power on minutes: 2642217 [h:m  44036:57]
+    Status: background scan enabled, none active (waiting for BMS interval timer to expire)
+    Number of background scans performed: 459
+    Background medium scan progress: 0.00 %
+    Number of Background medium scans performed: 459
+
+Non-volatile cache log page  [0x17]
+  Remaining nonvolatile time: 0 (i.e. it is now volatile)
+  Maximum non-volatile time: 0 (i.e. it is now volatile)
+
+Protocol specific port log page  [0x18]
+Protocol specific port log page for SAS SSP  [0x18]
+ Relative target port identifier = 1
+  generation code = 5
+  number of phys = 1
+  phy identifier= 0x0
+    attached SAS device type: SAS or SATA device
+    attached reason: unknown
+    reason: loss of dword synchronization
+    negotiated logical link rate: 12 Gbps
+    attached initiator port: ssp=1 stp=1 smp=1
+    attached target port: ssp=0 stp=0 smp=0
+    SAS address = 0x5000cca0ac70c2e5
+    attached SAS address = 0x5d050990000474e2
+    attached phy identifier= 0x2
+    Invalid DWORD count = 13
+    Running disparity error count = 13
+    Loss of DWORD synchronization count = 3
+    Phy reset problem count = 0
+    Phy event descriptors:
+      Invalid word count: 13
+      Running disparity error count: 13
+      Loss of dword synchronization count: 3
+      Phy reset problem count: 0
+ Relative target port identifier = 2
+  generation code = 5
+  number of phys = 1
+  phy identifier= 0x1
+    attached SAS device type: no device attached
+    attached reason: unknown
+    reason: power on
+    negotiated logical link rate: phy enabled; unknown rate
+    attached initiator port: ssp=0 stp=0 smp=0
+    attached target port: ssp=0 stp=0 smp=0
+    SAS address = 0x5000cca0ac70c2e6
+    attached SAS address = 0x0
+    attached phy identifier= 0x0
+    Invalid DWORD count = 0
+    Running disparity error count = 0
+    Loss of DWORD synchronization count = 0
+    Phy reset problem count = 0
+    Phy event descriptors:
+      Invalid word count: 0
+      Running disparity error count: 0
+      Loss of dword synchronization count: 0
+      Phy reset problem count: 0
+
+General statistics and performance log page  [0x19]
+  General access statistics and performance
+    number of read commands = 0x9a7ea6a11
+    number of write commands = 0x8ba4c6186
+    number of logical blocks received = 0x5a6dff8352
+    number of logical blocks transmitted = 0x7f9c561480
+    read command processing intervals = 0x0
+    write command processing intervals = 0x0
+    weighted number of read commands plus write commands = 0x0
+    weighted read command processing plus write command processing = 0x0
+  Idle time
+    idle time intervals = 0x8178ef7c
+  Time interval
+    time interval negative exponent = 0x2
+    time interval integer = 0x5
+
+Power condition transitions log page  [0x1a]
+  Accumulated transitions to active = 0
+  Accumulated transitions to idle_a = 0
+  Accumulated transitions to idle_b = 0
+  Accumulated transitions to idle_c = 0
+  Accumulated transitions to standby_z = 0
+  Accumulated transitions to standby_y = 0
+
+Informational exceptions log page  [0x2f]
+  IE asc = 0x0, ascq = 0x0
+    Current temperature = <unknown>
+    Threshold temperature = <unknown>  [common extension]
+    Maximum temperature = <unknown>  [common extension]
+  Parameter code = 0x3, contents in hex:
+    00 03 03 04 00 28 51 29
+  Parameter code = 0x4, contents in hex:
+    00 04 03 04 00 00 00 4d
+  Parameter code = 0x5, contents in hex:
+    00 05 03 0c 00 00 00 00  00 00 00 00 00 28 31 27
+  Parameter code = 0x6, contents in hex:
+    00 06 03 20 04 00 00 00  10 00 00 00 14 00 00 00
+    54 00 00 00 1d 00 00 00  32 00 00 00 42 00 00 00
+    73 02 02 00
+
+HGST/WDC performance counters log page  [0x30]
+   Zero Seeks = 0
+  Seeks >= 2/3 = 0
+  Seeks >= 1/3 and < 2/3 = 0
+  Seeks >= 1/6 and < 1/3 = 0
+  Seeks >= 1/12 and < 1/6 = 0
+  Seeks > 0 and < 1/12 = 0
+  Overrun counter = 0
+  Underrun counter = 0
+  Device cache full read hits = 0
+  Device cache partial read hits = 0
+  Device cache write hits = 0
+  Device cache fast writes = 0
+  Device cache read misses = 0
+
+Unable to decode log page [0x32], here is hex:
+  32 00 02 64 00 00 01 c8  00 00 00 00 00 00 00 00
+  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+  .....  [truncated after 64 of 616 bytes (use '-H' to see the rest)]
+
+Unable to decode log page [0x35], here is hex:
+  35 00 00 10 00 01 03 0c  00 00 00 01 5d 05 09 90
+  00 04 74 e2
+
+
+Unable to decode log page [0x36], here is hex:
+  36 00 00 80 00 00 03 7c  48 50 57 4c 44 34 80 06
+  00 64 ac 04 64 00 00 00  01 00 00 d2 59 dd ff ff
+  02 c2 db 18 00 00 00 7f  9c 56 14 80 00 00 00 5a
+  6d ff 83 52 00 00 00 00  00 00 00 00 00 00 00 2c
+  .....  [truncated after 64 of 132 bytes (use '-H' to see the rest)]
+
+Seagate cache statistics log page [0x37]
+  Blocks sent to initiator = 0
+
+Unable to decode log page [0x39], here is hex:
+  39 00 ff d0 00 00 03 0c  00 01 01 3f 00 01 4a 58
+  03 53 00 00 00 01 03 80  09 6e 31 4c 50 03 04 80
+  24 85 ab 04 00 00 00 00  00 00 20 0c b7 0c 00 00
+  00 00 00 00 00 08 00 00  00 00 00 00 00 00 00 00
+  .....  [truncated after 64 of 65492 bytes (use '-H' to see the rest)]

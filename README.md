@@ -1,7 +1,7 @@
 # ASRock Rack D1541D4U-2T8R mit NVIDIA Tesla T4: Unterlagen zum Verkauf
 
 Ein Speicher- und Inferenzserver auf Basis eines Xeon-D-Boards, eingerichtet
-unter TrueNAS SCALE. Alle Angaben hier wurden am 03. und 04.10.2026 auf dem
+unter TrueNAS SCALE. Alle Angaben hier wurden vom 03. bis 05.10.2026 auf dem
 laufenden Gerät ausgelesen oder gemessen, nicht aus Datenblättern übernommen.
 
 | Datei | Inhalt |
@@ -11,7 +11,7 @@ laufenden Gerät ausgelesen oder gemessen, nicht aus Datenblättern übernommen.
 | [MESSUNGEN.md](MESSUNGEN.md) | Rohwerte der Lüfter- und Lastmessungen |
 | [skripte/](skripte/) | Lüfterregelung und Wächter, genau so, wie sie auf dem System laufen |
 | [bmc-konsole/](bmc-konsole/) | Weboberfläche mit HTML5-Fernkonsole für den BMC, als Docker-Container |
-| [smart/](smart/) | Ungekürzte SMART-Ausgaben aller zwölf Datenträger |
+| [smart/](smart/) | Ungekürzte SMART-Ausgaben aller zwölf Datenträger, aktueller Stand nach erweitertem Selbsttest und Erstprüfung |
 
 ## Ausstattung
 
@@ -47,19 +47,24 @@ richtige Betriebsart.
 ### Zustand
 
 **Die acht SAS-SSDs** wurden am 03.10.2026 mit *SCSI Cryptographic Erase
-(Sanitize)* gelöscht. Im Ordner `smart/` liegt für jede SSD der Stand vor und
-nach dem Löschen.
+(Sanitize)* gelöscht. Danach lief auf jeder ein erweiterter Selbsttest über
+das ganze Medium, ohne Fehler. Die aktuellen Reports liegen in
+[smart/aktuell/](smart/aktuell/), die Stände vor und nach dem Löschen in
+[smart/2026-10-03_erstpruefung/](smart/2026-10-03_erstpruefung/). Eine
+Übersicht aller Werte steht in [smart/README.md](smart/README.md).
+
+Stand 05.10.2026:
 
 | Seriennummer | Betriebsstunden | Abnutzung | Defektliste | Unkorrigierte Fehler |
 |---|---|---|---|---|
-| WZV1BL6A | 44.575 | 2 % | 0 | 0 |
-| WZV1KBBA | 44.564 | 2 % | 0 | 0 |
-| WZX0234A | 43.991 | 2 % | 0 | 0 |
-| WZX038XA | 43.991 | 2 % | 0 | 0 |
-| WZX00G5A | 43.990 | 2 % | 0 | 0 |
-| WZX01YYA | 43.989 | 2 % | 0 | 0 |
-| WZV1WUVA | 22.779 | 1 % | 0 | 0 |
-| WZV1URWA | 22.704 | 1 % | 0 | 0 |
+| WZV1BL6A | 44.622 | 2 % | 0 | 0 |
+| WZV1KBBA | 44.611 | 2 % | 0 | 0 |
+| WZX0234A | 44.038 | 2 % | 0 | 0 |
+| WZX038XA | 44.038 | 2 % | 0 | 0 |
+| WZX00G5A | 44.037 | 2 % | 0 | 0 |
+| WZX01YYA | 44.036 | 2 % | 0 | 0 |
+| WZV1WUVA | 22.826 | 1 % | 0 | 0 |
+| WZV1URWA | 22.752 | 1 % | 0 | 0 |
 
 Die Betriebsstunden sind hoch, rund fünf Jahre Dauerbetrieb bei den meisten.
 Die Abnutzung ist dagegen gering: Nach Angabe der Laufwerke selbst
@@ -67,20 +72,22 @@ Die Abnutzung ist dagegen gering: Nach Angabe der Laufwerke selbst
 verbraucht. Alle melden `SMART Health Status: OK`.
 
 Ein Hinweis zur Einordnung: Sechs der acht SSDs zeigen einen hohen Zähler bei
-*Non-medium errors* (rund 82.000 bis 105.000, die beiden jüngeren 624 und 821),
+*Non-medium errors* (rund 82.000 bis 105.000, die beiden jüngeren 761 und 969),
 dazu einzelne *Invalid DWORD*-Ereignisse auf dem SAS-Link.
 Diese Zähler betreffen Übertragung und Befehlsablauf, nicht den Speicher
-selbst. Die Zähler für Medienschäden (Defektliste, unkorrigierte Lese- und
+selbst. Sie steigen bei Neustarts, im laufenden Betrieb kaum: Während der
+zehn Stunden des Selbsttests kamen 0 bis 3 hinzu. Die Zähler für Medienschäden (Defektliste, unkorrigierte Lese- und
 Schreibfehler) stehen bei allen acht auf null.
 
-**Die beiden Festplatten** (WD Green, 4 TB): 2.820 und 5.219 Betriebsstunden,
-keine umgelagerten oder wartenden Sektoren, keine CRC-Fehler, Kurztest ohne
-Fehler. Die WD Green ist eine Desktopplatte und nicht für Dauerbetrieb im
+**Die beiden Festplatten** (WD Green, 4 TB): 2.845 und 5.244 Betriebsstunden,
+keine umgelagerten oder wartenden Sektoren, keine CRC-Fehler, Kurztest und
+erweiterter Selbsttest ohne Fehler. Die WD Green ist eine Desktopplatte und nicht für Dauerbetrieb im
 Verbund gebaut. Für Daten mit Wert gehören sie gespiegelt.
 
-**Die beiden Boot-SSDs** (HPE VK0120GEYJP, 120 GB): 53.218 und 51.379
+**Die beiden Boot-SSDs** (HPE VK0120GEYJP, 120 GB): 53.242 und 51.402
 Betriebsstunden, also rund sechs Jahre am Netz. Keine umgelagerten Sektoren,
-keine Einträge im Fehlerprotokoll, Kurztest am 04.10.2026 ohne Fehler. Der
+keine Einträge im Fehlerprotokoll, Kurztest am 04.10.2026 und erweiterter
+Selbsttest nach dem Firmware-Update ohne Fehler. Der
 Verschleißwert (Attribut 173, normiert) steht bei 93 und 98 von 100. SMART war
 in beiden Laufwerken abgeschaltet und wurde für diese Prüfung eingeschaltet.
 
