@@ -1,6 +1,6 @@
 # Messungen
 
-Alle Werte vom 04.10.2026, gemessen am laufenden System im **offenen Aufbau**,
+Abschnitte 1 bis 3 vom 04.10.2026, gemessen am laufenden System im **offenen Aufbau**,
 also ohne geschlossenes Gehäuse. Raumtemperatur nicht erfasst.
 
 ## 1. Drehzahl je Stellwert
@@ -307,4 +307,105 @@ Protokoll der Regelung in derselben Zeit (`/mnt/scripts/t4-fan.log`):
 2026-10-04 01:02:40  GPU 44 C  CPU 42 C  Platten 37 C  X540 50 C  PCH 38 C  ->  Blower 40%  Gehaeuse 30%  Netz 30%
 2026-10-04 01:02:50  GPU 43 C  CPU 42 C  Platten 37 C  X540 50 C  PCH 38 C  ->  Blower 35%  Gehaeuse 30%  Netz 30%
 2026-10-04 01:03:01  GPU 43 C  CPU 42 C  Platten 37 C  X540 50 C  PCH 38 C  ->  Blower 30%  Gehaeuse 30%  Netz 30%
+```
+
+## 4. Geschlossenes Gehäuse, TrueNAS 27 (06.10.2026)
+
+Nach dem Update auf TrueNAS 27.0.0-RC.1, Gehäusedeckel geschlossen. Dieselbe
+Last wie oben (`nbody`, hier ohne Container direkt auf dem Host gestartet),
+die Regelung arbeitet frei. Acht Minuten Last, danach sechs Minuten Ruhe.
+Treiber unverändert 580.173.02. Kurzlauf vorab: 4.136 GFLOP/s.
+
+Ergebnis: Die Karte wird im geschlossenen Gehäuse rund 10 K wärmer als im
+offenen Aufbau. Der Blower steht nach gut zwei Minuten auf 100 %, die GPU
+erreicht 74–75 °C und steigt am Ende nur noch um 1 K in drei Minuten. Grenzen
+der T4 laut `nvidia-smi`: Max Operating 85 °C, Slowdown 93 °C, Shutdown 96 °C.
+Eine thermische Drosselung trat nicht auf, aktiver Grund war nur die
+Leistungsgrenze (`0x4`). Die Gehäusezone (Noctua hinten) blieb bei 30–33 %,
+weil sie nach Platten- und CPU-Temperatur regelt, nicht nach der GPU.
+
+Spalten: Uhrzeit, Phase, GPU-Temperatur, Leistung, SM-Takt, Auslastung,
+Leistungszustand, gemessene Blowerdrehzahl (U/min).
+
+```
+22:50:12  last   49 °C   32.64 W   1245 MHz   38 %  P0  Blower 3800
+22:50:22  last   57 °C   67.88 W   1155 MHz  100 %  P0  Blower 4500
+22:50:33  last   60 °C   67.74 W   1155 MHz  100 %  P0  Blower 5200
+22:50:43  last   63 °C   67.74 W   1125 MHz  100 %  P0  Blower 5700
+22:50:54  last   65 °C   67.20 W   1110 MHz  100 %  P0  Blower 6000
+22:51:05  last   66 °C   67.83 W   1110 MHz  100 %  P0  Blower 6200
+22:51:15  last   67 °C   67.74 W   1110 MHz  100 %  P0  Blower 6300
+22:51:26  last   68 °C   64.88 W   1095 MHz  100 %  P0  Blower 6500
+22:51:36  last   68 °C   68.06 W   1080 MHz  100 %  P0  Blower 6500
+22:51:47  last   69 °C   67.88 W   1080 MHz  100 %  P0  Blower 6600
+22:51:58  last   70 °C   67.45 W   1095 MHz  100 %  P0  Blower 6600
+22:52:08  last   70 °C   68.26 W   1080 MHz  100 %  P0  Blower 6600
+22:52:19  last   70 °C   65.82 W   1080 MHz  100 %  P0  Blower 6700
+22:52:29  last   71 °C   68.26 W   1080 MHz  100 %  P0  Blower 6800
+22:52:40  last   71 °C   66.17 W   1110 MHz  100 %  P0  Blower 6800
+22:52:51  last   71 °C   65.69 W   1080 MHz  100 %  P0  Blower 6800
+22:53:01  last   72 °C   68.17 W   1050 MHz  100 %  P0  Blower 6800
+22:53:12  last   72 °C   65.78 W   1065 MHz  100 %  P0  Blower 6900
+22:53:23  last   72 °C   66.41 W   1080 MHz  100 %  P0  Blower 6800
+22:53:33  last   72 °C   66.60 W   1095 MHz  100 %  P0  Blower 6800
+22:53:44  last   72 °C   64.74 W   1080 MHz  100 %  P0  Blower 6900
+22:53:54  last   73 °C   63.82 W   1080 MHz  100 %  P0  Blower 6800
+22:54:05  last   73 °C   67.07 W   1065 MHz  100 %  P0  Blower 6800
+22:54:16  last   73 °C   66.22 W   1065 MHz  100 %  P0  Blower 6800
+22:54:26  last   73 °C   65.56 W   1065 MHz  100 %  P0  Blower 6800
+22:54:37  last   73 °C   66.25 W   1065 MHz  100 %  P0  Blower 6800
+22:54:47  last   73 °C   66.03 W   1050 MHz  100 %  P0  Blower 6800
+22:54:58  last   73 °C   65.79 W   1065 MHz  100 %  P0  Blower 6800
+22:55:09  last   74 °C   66.88 W   1080 MHz  100 %  P0  Blower 6800
+22:55:19  last   74 °C   61.58 W   1065 MHz  100 %  P0  Blower 6800
+22:55:30  last   74 °C   64.80 W   1065 MHz  100 %  P0  Blower 6800
+22:55:40  last   74 °C   67.22 W   1050 MHz  100 %  P0  Blower 6800
+22:55:53  last   74 °C   66.94 W   1065 MHz  100 %  P0  Blower 6800
+22:56:04  last   74 °C   67.03 W   1050 MHz  100 %  P0  Blower 6800
+22:56:14  last   74 °C   65.80 W   1065 MHz  100 %  P0  Blower 6800
+22:56:25  last   74 °C   65.49 W   1065 MHz  100 %  P0  Blower 6800
+22:56:35  last   74 °C   65.75 W   1065 MHz  100 %  P0  Blower 6800
+22:56:46  last   74 °C   65.75 W   1065 MHz  100 %  P0  Blower 6800
+22:56:57  last   74 °C   66.27 W   1050 MHz  100 %  P0  Blower 6800
+22:57:07  last   74 °C   66.25 W   1065 MHz  100 %  P0  Blower 6800
+22:57:18  last   75 °C   61.59 W   1050 MHz  100 %  P0  Blower 6800
+22:57:28  last   74 °C   66.84 W   1050 MHz  100 %  P0  Blower 6800
+22:57:39  last   75 °C   65.27 W   1065 MHz  100 %  P0  Blower 6800
+22:57:50  last   75 °C   66.26 W   1050 MHz  100 %  P0  Blower 6800
+22:58:00  last   74 °C   68.55 W   1050 MHz  100 %  P0  Blower 6800
+22:58:11  last   75 °C   66.37 W   1050 MHz  100 %  P0  Blower 6800
+22:58:22  ruhe   67 °C   11.80 W    300 MHz    0 %  P8  Blower 6900
+22:58:32  ruhe   62 °C   11.32 W    300 MHz    0 %  P8  Blower 6900
+22:58:43  ruhe   58 °C   11.04 W    300 MHz    0 %  P8  Blower 6700
+22:58:53  ruhe   55 °C   10.84 W    300 MHz    0 %  P8  Blower 6500
+22:59:04  ruhe   53 °C   10.64 W    300 MHz    0 %  P8  Blower 6400
+22:59:15  ruhe   51 °C   10.64 W    300 MHz    0 %  P8  Blower 6300
+22:59:25  ruhe   50 °C   10.46 W    300 MHz    0 %  P8  Blower 6000
+22:59:36  ruhe   49 °C   10.35 W    300 MHz    0 %  P8  Blower 5800
+22:59:46  ruhe   48 °C   10.65 W    300 MHz    0 %  P8  Blower 5500
+22:59:57  ruhe   47 °C   10.84 W    300 MHz    0 %  P8  Blower 5300
+23:00:08  ruhe   47 °C   10.66 W    300 MHz    0 %  P8  Blower 5100
+23:00:18  ruhe   46 °C   10.84 W    300 MHz    0 %  P8  Blower 4800
+23:00:29  ruhe   46 °C   10.35 W    300 MHz    0 %  P8  Blower 4500
+23:00:40  ruhe   46 °C   11.32 W    300 MHz    0 %  P8  Blower 4100
+23:00:50  ruhe   46 °C   11.13 W    300 MHz    0 %  P8  Blower 3800
+23:01:01  ruhe   46 °C   10.76 W    300 MHz    0 %  P8  Blower 3500
+23:01:11  ruhe   45 °C   10.74 W    300 MHz    0 %  P8  Blower 3500
+23:01:22  ruhe   45 °C   10.35 W    300 MHz    0 %  P8  Blower 3400
+23:01:33  ruhe   45 °C   10.55 W    300 MHz    0 %  P8  Blower 3500
+23:01:43  ruhe   45 °C   10.65 W    300 MHz    0 %  P8  Blower 3500
+23:01:54  ruhe   45 °C   10.93 W    300 MHz    0 %  P8  Blower 3400
+23:02:04  ruhe   45 °C   10.64 W    300 MHz    0 %  P8  Blower 3400
+23:02:15  ruhe   45 °C   10.73 W    300 MHz    0 %  P8  Blower 3400
+23:02:26  ruhe   44 °C   10.46 W    300 MHz    0 %  P8  Blower 3400
+23:02:36  ruhe   44 °C   10.15 W    300 MHz    0 %  P8  Blower 3400
+23:02:47  ruhe   44 °C   10.25 W    300 MHz    0 %  P8  Blower 3400
+23:02:57  ruhe   44 °C   11.52 W    300 MHz    0 %  P8  Blower 3400
+23:03:08  ruhe   44 °C   10.36 W    300 MHz    0 %  P8  Blower 3400
+23:03:19  ruhe   44 °C   10.16 W    300 MHz    0 %  P8  Blower 3400
+23:03:29  ruhe   44 °C   10.26 W    300 MHz    0 %  P8  Blower 3400
+23:03:40  ruhe   44 °C   10.16 W    300 MHz    0 %  P8  Blower 3400
+23:03:50  ruhe   44 °C   10.16 W    300 MHz    0 %  P8  Blower 3400
+23:04:01  ruhe   44 °C   10.16 W    300 MHz    0 %  P8  Blower 3400
+23:04:12  ruhe   44 °C   10.16 W    300 MHz    0 %  P8  Blower 3400
 ```

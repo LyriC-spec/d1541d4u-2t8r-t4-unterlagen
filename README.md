@@ -25,7 +25,7 @@ laufenden Gerät ausgelesen oder gemessen, nicht aus Datenblättern übernommen.
 | Netzwerk onboard | 2× 10GBase-T (Intel X540) |
 | Netzwerk Steckkarte | HPE 563SFP+ (869583-001), 4× 10G SFP+ (Intel X710) |
 | Speichercontroller | Broadcom/LSI SAS3008, meldet sich als SAS9300-8i, **IT-Mode**, Firmware 16.00.12.00 |
-| Betriebssystem | TrueNAS SCALE 26.0.0-BETA.3 |
+| Betriebssystem | TrueNAS 27.0.0-RC.1 (am 06.10.2026 von 26.0.0-BETA.3 aktualisiert) |
 
 Die T4 läuft mit acht statt sechzehn PCIe-3.0-Bahnen (`LnkSta: Width x8
 (downgraded)`). Ihr Port an der CPU ist geteilt, die andere Hälfte gehört dem
@@ -142,8 +142,14 @@ rund 11 W, 40–50 °C, Blower auf 30 % (3200 U/min).
 Mit der Regelung (dieselbe Last, Blower frei): Nach drei Minuten pendelt sie
 sich bei **64–65 °C und 76–80 % Blower** (6100 U/min) ein. Gehäuse- und
 Netzzone bleiben dabei auf 30 %, die Datenträger bei 37 °C, der X540 bei 50 °C.
-Endet die Last, ist der Blower nach anderthalb Minuten wieder auf 30 %. Die
-Rohwerte stehen in [MESSUNGEN.md](MESSUNGEN.md).
+Endet die Last, ist der Blower nach anderthalb Minuten wieder auf 30 %.
+
+**Mit geschlossenem Deckel** (06.10.2026, TrueNAS 27) ist es rund 10 K wärmer:
+Der Blower läuft unter Dauerlast auf 100 %, die GPU erreicht 74–75 °C. Das
+liegt unter der Betriebsgrenze der T4 von 85 °C, gedrosselt wurde nur durch
+die Leistungsgrenze, nicht thermisch. Reserve für einen warmen Raum oder
+einen vollen Schrank bleibt damit aber wenig. Die Rohwerte stehen in
+[MESSUNGEN.md](MESSUNGEN.md).
 
 ## Fernwartung (BMC)
 
@@ -246,8 +252,10 @@ gemeldet wird nur die Drehzahl des einen.
 BMC nimmt Stellwerte für diesen Anschluss an, die Drehzahl ändert sich aber
 nicht. Wahrscheinlich ist es ein 3-Pin-Lüfter ohne PWM-Eingang.
 
-**Installiert ist eine Beta.** TrueNAS SCALE 26.0.0-BETA.3. Wer ein stabiles
-System will, setzt neu auf. Die Hardware ist davon unberührt, und wie man die
+**Installiert ist ein Release Candidate.** TrueNAS 27.0.0-RC.1 (TrueNAS 26
+wurde in 27 umbenannt). Die vorherige 26.0.0-BETA.3 liegt noch als
+Boot-Umgebung bereit. Wer ein stabiles System will, wechselt auf das fertige
+Release, sobald es erscheint, oder setzt neu auf. Die Hardware ist davon unberührt, und wie man die
 T4 danach wieder einrichtet, steht in [EINRICHTUNG.md](EINRICHTUNG.md).
 
 **Datenpools sind nicht angelegt.** Es existiert nur der gespiegelte boot-pool.
