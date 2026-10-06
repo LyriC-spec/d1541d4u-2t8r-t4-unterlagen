@@ -120,7 +120,7 @@ Die Regelung kennt drei Zonen:
 | Zone | Lüfter | Richtet sich nach |
 |---|---|---|
 | Blower | FRNT_FAN2 | GPU |
-| Gehäuse | REAR_FAN1, zwei Noctua 60 mm am Y-Kabel | Datenträger, CPU |
+| Gehäuse | REAR_FAN1, zwei Noctua 60 mm am Y-Kabel | Datenträger, CPU, GPU |
 | Netz | FRNT_FAN3 auf Chipsatz und X540 | 10G-Baustein X540, Chipsatz |
 
 Dazu ein Wächter, der jede Minute prüft, ob die Regelung lebt, und sie notfalls
@@ -144,11 +144,14 @@ sich bei **64–65 °C und 76–80 % Blower** (6100 U/min) ein. Gehäuse- und
 Netzzone bleiben dabei auf 30 %, die Datenträger bei 37 °C, der X540 bei 50 °C.
 Endet die Last, ist der Blower nach anderthalb Minuten wieder auf 30 %.
 
-**Mit geschlossenem Deckel** (06.10.2026, TrueNAS 27) ist es rund 10 K wärmer:
-Der Blower läuft unter Dauerlast auf 100 %, die GPU erreicht 74–75 °C. Das
-liegt unter der Betriebsgrenze der T4 von 85 °C, gedrosselt wurde nur durch
-die Leistungsgrenze, nicht thermisch. Reserve für einen warmen Raum oder
-einen vollen Schrank bleibt damit aber wenig. Die Rohwerte stehen in
+**Mit geschlossenem Deckel** (06.10.2026, TrueNAS 27) ist es wärmer. Solange
+die Gehäuselüfter nur nach Datenträgern und CPU liefen, erreichte die GPU bei
+Blower 100 % 74–75 °C und stieg noch. Seitdem die Gehäusezone auch der GPU
+folgt, laufen unter Dauerlast Blower und Noctuas auf 100 %, und die GPU bleibt
+flach bei **72 °C**. Das liegt unter der Betriebsgrenze der T4 von 85 °C.
+Gedrosselt wurde nur durch die Leistungsgrenze, nicht thermisch. Reserve für
+einen warmen Raum oder einen vollen Schrank bleibt aber wenig. Unter
+Dauerlast ist das System entsprechend laut. Die Rohwerte stehen in
 [MESSUNGEN.md](MESSUNGEN.md).
 
 ## Fernwartung (BMC)

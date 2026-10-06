@@ -74,7 +74,7 @@ Vollast.
 
 | Ort | Inhalt |
 |---|---|
-| `/mnt/scripts/t4-fan.py` | Die Regelung, Takt 10 s, drei Zonen |
+| `/mnt/scripts/t4-fan.py` | Die Regelung, Takt 10 s, drei Zonen (Gehäusezone folgt seit 06.10.2026 auch der GPU) |
 | `/mnt/scripts/t4-fan-waechter.sh` | Wächter, prüft minütlich Prozess und Lebenszeichen |
 | `/mnt/scripts/t4-fan.log` | Protokoll der Regelung, rotiert bei 512 KB |
 | `/mnt/scripts/t4-fan-waechter.log` | Protokoll des Wächters, schreibt nur bei Eingriffen |

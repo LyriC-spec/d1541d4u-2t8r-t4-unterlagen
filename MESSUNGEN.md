@@ -409,3 +409,95 @@ Leistungszustand, gemessene Blowerdrehzahl (U/min).
 23:04:01  ruhe   44 °C   10.16 W    300 MHz    0 %  P8  Blower 3400
 23:04:12  ruhe   44 °C   10.16 W    300 MHz    0 %  P8  Blower 3400
 ```
+
+## 5. Gehäusezone an die GPU gekoppelt (06.10.2026)
+
+Wie Abschnitt 4, aber mit geänderter Regelung: Die Gehäusezone (REAR_FAN1,
+zwei Noctua 60 mm) folgt jetzt zusätzlich einer eigenen GPU-Kurve
+(55 °C → 30 %, 62 → 50 %, 68 → 80 %, 72 → 100 %). Sonst gleiche Last und
+gleiche Dauer, geschlossenes Gehäuse.
+
+Ergebnis: Die GPU bleibt ab der vierten Minute flach bei 72 °C, statt wie in
+Abschnitt 4 auf 74–75 °C weiterzusteigen. Das sind gut 2 K weniger, und vor
+allem steigt die Temperatur nicht mehr. Blower und Noctuas laufen dabei
+beide auf 100 % (6.800–6.900 und 3.400 U/min). Nach Ende der Last sind beide
+Zonen nach zweieinhalb Minuten wieder auf 30 %.
+
+Spalten: Uhrzeit, Phase, GPU-Temperatur, Leistung, SM-Takt, Auslastung,
+Drehzahlen (U/min), Stellwerte der Regelung (Blower/Gehäuse/Netz in %),
+BMC-Sensor „Card Side Temp“.
+
+```
+23:19:35  last   41 °C   10.16 W    300 MHz    0 %  Blower 3200  Noctua  900  Stellwerte 30/30/30    Card Side 41 °C
+23:19:48  last   52 °C   69.58 W   1185 MHz  100 %  Blower 3500  Noctua  900  Stellwerte 34/30/30    Card Side 41 °C
+23:20:00  last   58 °C   66.49 W   1155 MHz  100 %  Blower 4900  Noctua 1100  Stellwerte 55/35/30    Card Side 41 °C
+23:20:12  last   61 °C   68.16 W   1155 MHz  100 %  Blower 5400  Noctua 1500  Stellwerte 64/44/30    Card Side 41 °C
+23:20:23  last   63 °C   68.74 W   1125 MHz  100 %  Blower 5700  Noctua 1700  Stellwerte 70/50/30    Card Side 41 °C
+23:20:35  last   65 °C   64.58 W   1125 MHz  100 %  Blower 6000  Noctua 2000  Stellwerte 76/60/30    Card Side 42 °C
+23:20:46  last   66 °C   67.68 W   1110 MHz  100 %  Blower 6200  Noctua 2400  Stellwerte 83/70/30    Card Side 42 °C
+23:20:58  last   67 °C   65.63 W   1110 MHz  100 %  Blower 6400  Noctua 2500  Stellwerte 86/75/30    Card Side 42 °C
+23:21:10  last   68 °C   67.40 W   1095 MHz  100 %  Blower 6400  Noctua 2500  Stellwerte 90/80/30    Card Side 42 °C
+23:21:21  last   69 °C   67.98 W   1125 MHz  100 %  Blower 6500  Noctua 2700  Stellwerte 92/85/30    Card Side 42 °C
+23:21:33  last   69 °C   66.55 W   1095 MHz  100 %  Blower 6600  Noctua 2900  Stellwerte 92/85/30    Card Side 42 °C
+23:21:45  last   70 °C   63.06 W   1095 MHz  100 %  Blower 6600  Noctua 2900  Stellwerte 92/85/30    Card Side 42 °C
+23:21:56  last   70 °C   64.69 W   1095 MHz  100 %  Blower 6600  Noctua 3000  Stellwerte 95/90/30    Card Side 42 °C
+23:22:08  last   70 °C   66.07 W   1080 MHz  100 %  Blower 6700  Noctua 3000  Stellwerte 95/90/30    Card Side 42 °C
+23:22:19  last   71 °C   68.32 W   1080 MHz  100 %  Blower 6600  Noctua 3000  Stellwerte 95/90/30    Card Side 42 °C
+23:22:31  last   71 °C   66.22 W   1080 MHz  100 %  Blower 6800  Noctua 3200  Stellwerte 97/95/30    Card Side 42 °C
+23:22:43  last   71 °C   68.69 W   1065 MHz  100 %  Blower 6800  Noctua 3200  Stellwerte 97/95/30    Card Side 42 °C
+23:22:54  last   71 °C   66.50 W   1080 MHz  100 %  Blower 6800  Noctua 3200  Stellwerte 97/95/32    Card Side 42 °C
+23:23:06  last   71 °C   66.56 W   1080 MHz  100 %  Blower 6800  Noctua 3200  Stellwerte 97/95/32    Card Side 43 °C
+23:23:17  last   72 °C   66.40 W   1050 MHz  100 %  Blower 6800  Noctua 3400  Stellwerte 100/100/32  Card Side 43 °C
+23:23:29  last   72 °C   64.58 W   1080 MHz  100 %  Blower 6900  Noctua 3400  Stellwerte 100/100/32  Card Side 43 °C
+23:23:41  last   71 °C   64.11 W   1050 MHz  100 %  Blower 6900  Noctua 3400  Stellwerte 100/100/32  Card Side 43 °C
+23:23:52  last   72 °C   66.68 W   1080 MHz  100 %  Blower 6900  Noctua 3400  Stellwerte 100/100/32  Card Side 43 °C
+23:24:04  last   72 °C   65.50 W   1080 MHz  100 %  Blower 6900  Noctua 3400  Stellwerte 100/100/32  Card Side 43 °C
+23:24:16  last   72 °C   66.56 W   1065 MHz  100 %  Blower 6900  Noctua 3400  Stellwerte 100/100/32  Card Side 43 °C
+23:24:27  last   72 °C   66.69 W   1080 MHz  100 %  Blower 6800  Noctua 3400  Stellwerte 100/100/32  Card Side 43 °C
+23:24:39  last   72 °C   67.32 W   1080 MHz  100 %  Blower 6800  Noctua 3400  Stellwerte 100/100/32  Card Side 43 °C
+23:24:50  last   72 °C   62.68 W   1065 MHz  100 %  Blower 6900  Noctua 3400  Stellwerte 100/100/32  Card Side 43 °C
+23:25:02  last   72 °C   66.27 W   1065 MHz  100 %  Blower 6900  Noctua 3400  Stellwerte 100/100/32  Card Side 43 °C
+23:25:14  last   72 °C   66.46 W   1080 MHz  100 %  Blower 6800  Noctua 3400  Stellwerte 100/100/32  Card Side 43 °C
+23:25:27  last   72 °C   66.75 W   1050 MHz  100 %  Blower 6900  Noctua 3400  Stellwerte 100/100/32  Card Side 43 °C
+23:25:39  last   72 °C   66.12 W   1065 MHz  100 %  Blower 6800  Noctua 3400  Stellwerte 100/100/32  Card Side 43 °C
+23:25:51  last   72 °C   65.94 W   1065 MHz  100 %  Blower 6800  Noctua 3400  Stellwerte 100/100/32  Card Side 43 °C
+23:26:02  last   72 °C   66.94 W   1065 MHz  100 %  Blower 6800  Noctua 3400  Stellwerte 100/100/32  Card Side 43 °C
+23:26:14  last   72 °C   65.84 W   1080 MHz  100 %  Blower 6900  Noctua 3400  Stellwerte 100/100/32  Card Side 43 °C
+23:26:25  last   72 °C   64.60 W   1080 MHz  100 %  Blower 6800  Noctua 3400  Stellwerte 100/100/32  Card Side 43 °C
+23:26:37  last   72 °C   66.27 W   1080 MHz  100 %  Blower 6900  Noctua 3400  Stellwerte 100/100/32  Card Side 43 °C
+23:26:49  last   72 °C   64.46 W   1065 MHz  100 %  Blower 6800  Noctua 3400  Stellwerte 100/100/32  Card Side 43 °C
+23:27:00  last   72 °C   65.89 W   1080 MHz  100 %  Blower 6800  Noctua 3400  Stellwerte 100/100/34  Card Side 43 °C
+23:27:12  last   72 °C   66.74 W   1065 MHz  100 %  Blower 6800  Noctua 3400  Stellwerte 100/100/34  Card Side 43 °C
+23:27:23  last   72 °C   66.07 W   1065 MHz  100 %  Blower 6900  Noctua 3400  Stellwerte 100/100/34  Card Side 43 °C
+23:27:35  ruhe   69 °C   35.41 W   1260 MHz    0 %  Blower 6900  Noctua 3400  Stellwerte 100/100/34  Card Side 43 °C
+23:27:47  ruhe   61 °C   11.24 W    300 MHz    0 %  Blower 6800  Noctua 3300  Stellwerte 96/95/34    Card Side 43 °C
+23:27:58  ruhe   56 °C   10.85 W    300 MHz    0 %  Blower 6600  Noctua 3100  Stellwerte 91/90/34    Card Side 43 °C
+23:28:10  ruhe   53 °C   10.84 W    300 MHz    0 %  Blower 6400  Noctua 3000  Stellwerte 86/85/34    Card Side 43 °C
+23:28:22  ruhe   51 °C   11.03 W    300 MHz    0 %  Blower 6200  Noctua 2800  Stellwerte 76/75/34    Card Side 43 °C
+23:28:33  ruhe   50 °C   10.45 W    300 MHz    0 %  Blower 5800  Noctua 2500  Stellwerte 71/70/34    Card Side 43 °C
+23:28:45  ruhe   48 °C   10.45 W    300 MHz    0 %  Blower 5500  Noctua 2300  Stellwerte 66/65/34    Card Side 43 °C
+23:28:56  ruhe   47 °C   10.25 W    300 MHz    0 %  Blower 5300  Noctua 2100  Stellwerte 61/60/34    Card Side 43 °C
+23:29:08  ruhe   47 °C   10.45 W    300 MHz    0 %  Blower 5100  Noctua 1900  Stellwerte 56/55/34    Card Side 43 °C
+23:29:20  ruhe   46 °C   10.26 W    300 MHz    0 %  Blower 4800  Noctua 1700  Stellwerte 51/50/34    Card Side 43 °C
+23:29:31  ruhe   45 °C   10.35 W    300 MHz    0 %  Blower 4500  Noctua 1600  Stellwerte 46/45/34    Card Side 43 °C
+23:29:43  ruhe   45 °C   11.62 W    300 MHz    0 %  Blower 4100  Noctua 1400  Stellwerte 41/40/30    Card Side 43 °C
+23:29:54  ruhe   45 °C   10.84 W    300 MHz    0 %  Blower 3800  Noctua 1200  Stellwerte 31/30/30    Card Side 43 °C
+23:30:06  ruhe   45 °C   10.16 W    300 MHz    0 %  Blower 3400  Noctua 1000  Stellwerte 31/30/32    Card Side 43 °C
+23:30:18  ruhe   45 °C   10.26 W    300 MHz    0 %  Blower 3400  Noctua 1000  Stellwerte 31/30/32    Card Side 43 °C
+23:30:29  ruhe   45 °C   10.17 W    300 MHz    0 %  Blower 3400  Noctua 1000  Stellwerte 31/30/32    Card Side 43 °C
+23:30:41  ruhe   45 °C   10.75 W    300 MHz    0 %  Blower 3400  Noctua 1000  Stellwerte 31/30/32    Card Side 43 °C
+23:30:53  ruhe   44 °C   10.36 W    300 MHz    0 %  Blower 3400  Noctua 1000  Stellwerte 31/30/32    Card Side 43 °C
+23:31:04  ruhe   44 °C   10.06 W    300 MHz    0 %  Blower 3400  Noctua 1000  Stellwerte 31/30/32    Card Side 43 °C
+23:31:16  ruhe   44 °C   10.16 W    300 MHz    0 %  Blower 3400  Noctua 1000  Stellwerte 31/30/32    Card Side 43 °C
+23:31:27  ruhe   44 °C   10.16 W    300 MHz    0 %  Blower 3400  Noctua  900  Stellwerte 31/30/32    Card Side 43 °C
+23:31:39  ruhe   44 °C   10.16 W    300 MHz    0 %  Blower 3400  Noctua  900  Stellwerte 31/30/32    Card Side 43 °C
+23:31:51  ruhe   44 °C   10.16 W    300 MHz    0 %  Blower 3300  Noctua  900  Stellwerte 31/30/32    Card Side 43 °C
+23:32:02  ruhe   44 °C   10.06 W    300 MHz    0 %  Blower 3400  Noctua  900  Stellwerte 31/30/32    Card Side 43 °C
+23:32:14  ruhe   44 °C   10.06 W    300 MHz    0 %  Blower 3400  Noctua  900  Stellwerte 31/30/32    Card Side 43 °C
+23:32:26  ruhe   44 °C   10.06 W    300 MHz    0 %  Blower 3400  Noctua  900  Stellwerte 31/30/32    Card Side 43 °C
+23:32:37  ruhe   44 °C   10.35 W    300 MHz    0 %  Blower 3400  Noctua  900  Stellwerte 31/30/32    Card Side 43 °C
+23:32:49  ruhe   43 °C   10.06 W    300 MHz    0 %  Blower 3400  Noctua  900  Stellwerte 31/30/32    Card Side 42 °C
+23:33:00  ruhe   43 °C   10.75 W    300 MHz    0 %  Blower 3400  Noctua  900  Stellwerte 31/30/32    Card Side 42 °C
+23:33:12  ruhe   43 °C   10.17 W    300 MHz    0 %  Blower 3400  Noctua  900  Stellwerte 31/30/32    Card Side 42 °C
+23:33:24  ruhe   43 °C   10.46 W    300 MHz    0 %  Blower 3400  Noctua  900  Stellwerte 31/30/32    Card Side 42 °C
+```

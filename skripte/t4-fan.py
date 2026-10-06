@@ -29,7 +29,11 @@ faehrt.
 
 Zonen:
   blower   = GPU-Kurve. Bei unbekanntem GPU-Zustand Vollast.
-  gehaeuse = Maximum aus Platten- und CPU-Kurve.
+  gehaeuse = Maximum aus Platten-, CPU- und GPU-Gehaeusekurve. Der Blower
+             blaest die Abwaerme der T4 ins Gehaeuse; im geschlossenen
+             Gehaeuse muessen die hinteren Luefter sie abfuehren, sonst
+             steigt die Ansaugtemperatur des Blowers (gemessen 06.10.2026:
+             74-75 C bei Blower 100 %, Gehaeusezone 30 %).
   netz     = Maximum aus X540- und Chipsatzkurve. Die X540-Temperatur gibt es
              nur ueber IPMI, alle anderen Werte kommen aus sysfs und
              nvidia-smi.
@@ -58,6 +62,9 @@ DUTY_MIN, DUTY_MAX = 30, 100
 
 # (Temperatur C, Duty Prozent) - dazwischen wird linear interpoliert
 CURVE_GPU = [(45, 30), (55, 50), (62, 70), (68, 90), (72, 100)]
+# GPU-Anteil der Gehaeusezone: setzt spaeter ein als der Blower, damit die
+# Noctuas bei kurzer oder leichter Last ruhig bleiben.
+CURVE_GPU_GEHAEUSE = [(55, 30), (62, 50), (68, 80), (72, 100)]
 CURVE_CPU = [(55, 30), (70, 45), (80, 65), (88, 85), (95, 100)]
 CURVE_DISK = [(40, 30), (45, 50), (50, 70), (55, 90), (58, 100)]
 CURVE_X540 = [(55, 30), (65, 50), (75, 75), (85, 100)]
@@ -231,7 +238,8 @@ def main():
             ziel_blower = DUTY_MAX   # Karte antwortet nicht - nie leise
         else:
             ziel_blower = zone(bedarf(CURVE_GPU, "gpu"))
-        ziel_gehaeuse = zone(bedarf(CURVE_DISK, "disk"), bedarf(CURVE_CPU, "cpu"))
+        ziel_gehaeuse = zone(bedarf(CURVE_DISK, "disk"), bedarf(CURVE_CPU, "cpu"),
+                             bedarf(CURVE_GPU_GEHAEUSE, "gpu"))
         ziel_netz = zone(bedarf(CURVE_X540, "x540"), bedarf(CURVE_PCH, "pch"))
 
         notfall = ["%s %d C" % (k, roh[k]) for k in schluessel
