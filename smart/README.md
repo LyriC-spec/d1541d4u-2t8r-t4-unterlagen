@@ -1,12 +1,14 @@
 # SMART-Reports
 
-Ungekürzte Ausgaben aller zwölf Datenträger, auf dem Gerät erzeugt und nicht
+Ungekürzte Ausgaben aller zwölf eingebauten Datenträger und der beiden
+Ersatz-SSDs, auf dem Gerät erzeugt und nicht
 nachbearbeitet. Die Dateinamen enthalten Modell und Seriennummer, nicht den
 Gerätenamen (`/dev/sdX`), weil der sich nach einem Kaltstart ändern kann.
 
 | Ordner | Inhalt |
 |---|---|
 | [aktuell/](aktuell/) | Stand 05.10.2026, nach den Firmware-Updates und einem erweiterten Selbsttest auf jedem Laufwerk. `smartctl -x`, bei den SAS-SSDs zusätzlich `sg_logs -a` mit allen SCSI-Logseiten (Selbsttest, Hintergrundscan, Solid-State-Media, Fehlerzähler, Phy-Ereignisse) |
+| [ersatz/](ersatz/) | Die beiden lose beigelegten Ersatz-SSDs: je ein Report vor dem Löschen, nach dem Löschen (*Cryptographic Erase*, 07.10.2026) und nach dem erweiterten Selbsttest (08.10.2026) |
 | [2026-10-03_erstpruefung/](2026-10-03_erstpruefung/) | Erste Prüfung bei der Übernahme. Für die SAS-SSDs je ein Stand vor und nach dem Löschen (*SCSI Cryptographic Erase*, Dateien `_post-erase`). Die Boot-SSDs stehen hier noch auf der alten Firmware HPG1 |
 
 ## Erweiterter Selbsttest
@@ -14,7 +16,8 @@ Gerätenamen (`/dev/sdX`), weil der sich nach einem Kaltstart ändern kann.
 Alle zwölf Laufwerke haben den erweiterten Selbsttest (*Extended*, liest das
 ganze Medium) ohne Fehler abgeschlossen. Die SAS-SSDs führen ihn gedrosselt im
 Hintergrund aus und brauchten dafür knapp zehn Stunden (04.10.2026 22:20 bis
-05.10.2026 etwa 8:10).
+05.10.2026 etwa 8:10). Die beiden Ersatz-SSDs liefen den gleichen Test vom
+07.10.2026 abends bis 08.10.2026 früh, ebenfalls ohne Fehler.
 
 ## Übersicht, Stand 05.10.2026
 
@@ -42,6 +45,19 @@ und Firmware-Updates oft neu gestartet und kalt gestartet. Über die zehn
 Stunden des Selbsttests ohne Neustart kamen nur 0 bis 3 hinzu.
 *Invalid DWORD* (Ereignisse auf dem SAS-Link) steht bei 5 bis 14 und hat sich
 nicht verändert.
+
+### Ersatz-SSDs HPE MO003200JWUGA, lose beigelegt, Stand 08.10.2026
+
+| Seriennummer | Hergestellt | Betriebsstunden | Abnutzung | Defektliste | Fehler Lesen / Schreiben | Gelesen / geschrieben | Non-medium errors | Selbsttest |
+|---|---|---|---|---|---|---|---|---|
+| WZV1EJEA | KW 40/2019 | 199 | 0 % | 0 | 0 / 0 | 6 / 38 TB | 541 | ohne Fehler |
+| WZV1LHHA | KW 37/2019 | 200 | 0 % | 0 | 0 / 0 | 5 / 38 TB | 505 | ohne Fehler |
+
+Die 38 TB geschrieben sind bei beiden auf wenige GB gleich: Das ist der
+Einbrenntest im Werk, kein Betrieb. *Non-medium errors* stieg während Löschen
+und Selbsttest um 41 bzw. 63, bei je zwei gleichzeitig behandelten Platten um
+exakt denselben Betrag. Das kommt vom Einstecken im laufenden Betrieb und vom
+Löschen, nicht vom Laufwerk.
 
 ### Boot-SSDs HPE VK0120GEYJP, 120 GB, Firmware HPG6
 

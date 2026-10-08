@@ -11,7 +11,7 @@ laufenden Gerät ausgelesen oder gemessen, nicht aus Datenblättern übernommen.
 | [MESSUNGEN.md](MESSUNGEN.md) | Rohwerte der Lüfter- und Lastmessungen |
 | [skripte/](skripte/) | Lüfterregelung und Wächter, genau so, wie sie auf dem System laufen |
 | [bmc-konsole/](bmc-konsole/) | Weboberfläche mit HTML5-Fernkonsole für den BMC, als Docker-Container |
-| [smart/](smart/) | Ungekürzte SMART-Ausgaben aller zwölf Datenträger, aktueller Stand nach erweitertem Selbsttest und Erstprüfung |
+| [smart/](smart/) | Ungekürzte SMART-Ausgaben aller zwölf Datenträger und der beiden Ersatz-SSDs, aktueller Stand nach erweitertem Selbsttest und Erstprüfung |
 
 ## Ausstattung
 
@@ -41,8 +41,30 @@ richtige Betriebsart.
 | Menge | Typ | Modell | Anbindung |
 |---|---|---|---|
 | 8 | SAS-SSD 3,2 TB | HPE MO003200JWUGA | SAS3008 |
+| 2 | SAS-SSD 3,2 TB, **Ersatz, lose beigelegt** | HPE MO003200JWUGA | – |
 | 2 | HDD 4 TB | WD Green WD40EZRX | SATA am Board |
 | 2 | SATA-SSD 120 GB | HPE VK0120GEYJP | SATA, gespiegelter boot-pool |
+
+### Einbauplätze
+
+Die acht SAS-SSDs sitzen in einem Einbaurahmen mit 2 Spalten und 4 Reihen. Je
+ein SAS-Kabel bedient einen Block aus 2 × 2 Plätzen; innerhalb eines Blocks
+zählt der Controller erst die linke Spalte von oben nach unten, dann die
+rechte. Die Gerätenamen (`/dev/sdX`) wechseln nach einem Neustart, die Ports
+nicht: `/dev/disk/by-path/pci-0000:05:00.0-sas-phyN-lun-0`.
+Stand 08.10.2026:
+
+| | links | rechts |
+|---|---|---|
+| Reihe 1 (oben) | phy0 WZV1WUVA | phy2 WZV1BL6A |
+| Reihe 2 | phy1 WZV1URWA | phy3 WZX038XA |
+| Reihe 3 | phy4 WZX01YYA | phy6 WZX00G5A |
+| Reihe 4 (unten) | phy5 WZV1KBBA | phy7 WZX0234A |
+
+Die beiden jüngeren SSDs (rund 22.800 Stunden) sitzen oben links. Eine
+Locate-Anzeige gibt es nicht: Die Backplane hat keine SGPIO-Leitung zum
+Controller, `sas3ircu LOCATE` läuft durch, aber nichts leuchtet. Welche SSD in
+welchem Platz steckt, findet man über die Seriennummer auf dem Etikett.
 
 ### Zustand
 
@@ -78,6 +100,18 @@ Diese Zähler betreffen Übertragung und Befehlsablauf, nicht den Speicher
 selbst. Sie steigen bei Neustarts, im laufenden Betrieb kaum: Während der
 zehn Stunden des Selbsttests kamen 0 bis 3 hinzu. Die Zähler für Medienschäden (Defektliste, unkorrigierte Lese- und
 Schreibfehler) stehen bei allen acht auf null.
+
+**Die beiden Ersatz-SSDs** (lose beigelegt, gleiches Modell und gleiche
+Firmware HPD4) sind praktisch neu: rund 200 Betriebsstunden, 0 % Abnutzung,
+die geschriebenen 38 TB stammen vom Einbrenntest im Werk. Beide wurden am
+07.10.2026 im Server gelöscht (*Cryptographic Erase*) und haben den
+erweiterten Selbsttest ohne Fehler bestanden. Reports vor und nach dem Löschen
+und nach dem Test liegen in [smart/ersatz/](smart/ersatz/).
+
+| Seriennummer | Hergestellt | Betriebsstunden | Abnutzung | Defektliste | Unkorrigierte Fehler |
+|---|---|---|---|---|---|
+| WZV1EJEA | KW 40/2019 | 199 | 0 % | 0 | 0 |
+| WZV1LHHA | KW 37/2019 | 200 | 0 % | 0 | 0 |
 
 **Die beiden Festplatten** (WD Green, 4 TB): 2.845 und 5.244 Betriebsstunden,
 keine umgelagerten oder wartenden Sektoren, keine CRC-Fehler, Kurztest und
