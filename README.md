@@ -45,6 +45,18 @@ richtige Betriebsart.
 | 2 | HDD 4 TB | WD Green WD40EZRX | SATA am Board |
 | 2 | SATA-SSD 120 GB | HPE VK0120GEYJP | SATA, gespiegelter boot-pool |
 
+Teilenummern und eigentlicher Hersteller, abgelesen vom Etikett je eines
+Laufwerks (3,2 TB: WZV1LHHA, 120 GB: BTWA545404RR120CGN). Bei HPE kann die
+Endung der P/N zwischen Lieferchargen abweichen.
+
+| HPE-Modell | HPE P/N | HPE GPN | Hersteller und Modell |
+|---|---|---|---|
+| MO003200JWUGA | P07442-004 | P09105-004 | WD Ultrastar SS530, WUSTR6432ASS200, SAS 12 Gb/s, Dual-Port |
+| VK0120GEYJP | 804574-002 | 804583-001 | Intel SSD DC S3510, SSDSC2BB120G6P, SATA 6 Gb/s |
+
+Auf den Etiketten steht die Werks-Firmware (HPD1 bzw. HPG1). Installiert ist
+die neueste, siehe Abschnitt Firmware.
+
 ### Einbauplätze
 
 Die acht SAS-SSDs sitzen in einem Einbaurahmen mit 2 Spalten und 4 Reihen. Je
