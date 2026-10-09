@@ -129,6 +129,9 @@ und nach dem Test liegen in [smart/ersatz/](smart/ersatz/).
 keine umgelagerten oder wartenden Sektoren, keine CRC-Fehler, Kurztest und
 erweiterter Selbsttest ohne Fehler. Die WD Green ist eine Desktopplatte und nicht für Dauerbetrieb im
 Verbund gebaut. Für Daten mit Wert gehören sie gespiegelt.
+Am 08./09.10.2026 wurden beide vollständig mit Nullen überschrieben
+(`dd`, alle 4.000.753.476.096 Bytes, danach Stichproben über die ganze
+Platte geprüft). Sie sind leer, ohne Partitionen.
 
 **Die beiden Boot-SSDs** (HPE VK0120GEYJP, 120 GB): 53.242 und 51.402
 Betriebsstunden, also rund sechs Jahre am Netz. Keine umgelagerten Sektoren,
@@ -136,6 +139,10 @@ keine Einträge im Fehlerprotokoll, Kurztest am 04.10.2026 und erweiterter
 Selbsttest nach dem Firmware-Update ohne Fehler. Der
 Verschleißwert (Attribut 173, normiert) steht bei 93 und 98 von 100. SMART war
 in beiden Laufwerken abgeschaltet und wurde für diese Prüfung eingeschaltet.
+Am 08.10.2026 wurden beide nacheinander aus dem Spiegel genommen, per
+*Sanitize Block Erase* gelöscht, vollständig auf Nullen geprüft und wieder
+eingehängt. Auf ihnen liegt nur die aktuelle TrueNAS-Installation, ältere
+Boot-Umgebungen gibt es nicht mehr. Neustarttest am 09.10.2026 bestanden.
 
 ## Firmware
 
